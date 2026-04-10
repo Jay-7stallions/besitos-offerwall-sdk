@@ -1,0 +1,61 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Build
+dist/
+lib/
+build/
+.next/
+out/
+.expo/
+.turbo/
+
+# Android
+.gradle/
+local.properties
+*.iml
+.idea/
+capture/
+*.apk
+*.aab
+
+# iOS
+.build/
+Pods/
+*.xcworkspace
+*.xcuserstate
+DerivedData/
+*.app
+*.ipa
+
+# App / Expo specific
+react-native/example/android/
+react-native/example/ios/
+react-native/example/.expo/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
