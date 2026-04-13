@@ -6,11 +6,11 @@ Embed the Besitos Offerwall inside your iOS, Android, or React Native app with a
 
 ## Requirements
 
-| Platform | Minimum Version |
-| :--- | :--- |
-| Android | API 21 (Android 5.0) |
-| iOS | iOS 12 |
-| React Native | 0.73+ |
+| Platform     | Minimum Version      |
+| :----------- | :------------------- |
+| Android      | API 21 (Android 5.0) |
+| iOS          | iOS 12               |
+| React Native | 0.73+                |
 
 ---
 
@@ -138,12 +138,12 @@ do {
 ### React Native / Expo
 
 ```tsx
-import { BesitosOfferwall } from '@besitos/offerwall-sdk';
+import { BesitosOfferwall } from "@besitos/offerwall-sdk";
 
 // One line — opens the native Offerwall screen.
 BesitosOfferwall.show({
-  partnerId: 'your_partner_id',
-  userId: 'user_123',
+  partnerId: "your_partner_id",
+  userId: "user_123",
 });
 ```
 
@@ -151,14 +151,15 @@ With optional parameters:
 
 ```tsx
 BesitosOfferwall.show({
-  partnerId: 'your_partner_id',
-  userId: 'user_123',
-  subId: 'sub_001',
+  partnerId: "your_partner_id",
+  userId: "user_123",
+  subId: "sub_001",
   hideHeader: true,
   hideFooter: true,
 });
 ```
-```
+
+````
 
 ---
 
@@ -190,6 +191,78 @@ BesitosOfferwall.show({
 | iOS: `invalidConfig` error | Check that `partnerId` and `userId` use only `A-Z a-z 0-9 - _` |
 | React Native: module not found | Run `npm install` and `npx expo prebuild` |
 | React Native: blank WebView on Android | Ensure `react-native-webview` is linked (`npx expo prebuild`) |
+
+---
+
+## Local Development & Testing
+
+If you are a contributor or reviewer and want to test the SDK locally without publishing to a registry:
+
+### 1. Android (Contritube / Local Test)
+If you want to test the SDK without using JitPack:
+
+1. **Clone the repo** next to your project folder.
+2. In your app's `settings.gradle.kts` (or `.gradle`), link the module:
+   ```kotlin
+   include(":besitos-offerwall")
+   project(":besitos-offerwall").projectDir = File("../besitos-offerwall-sdk/android/besitos-offerwall")
+````
+
+3. In your app's `build.gradle.kts`, add the local project dependency:
+   ```kotlin
+   dependencies {
+       implementation(project(":besitos-offerwall"))
+   }
+   ```
+4. Sync Gradle and use `BesitosOfferwall.show(...)` as usual.
+
+### 2. iOS (Local Pod)
+
+In your test app's `Podfile`:
+
+```ruby
+pod 'BesitosOfferwall', :path => '../path/to/sdk/ios'
+```
+
+### 3. React Native (Local Link)
+
+In your test app's root:
+
+```bash
+# This installs the local folder as a package
+npm install ../path/to/sdk
+```
+
+---
+
+## Manual Integration
+
+If you don't want to use Git or linking, you can manually copy the source files into your project:
+
+### 1. Android Manual Copy
+
+1. Copy the folder `android/besitos-offerwall/src/main/kotlin/ai` into your app's `src/main/kotlin/` directory.
+2. Add these dependencies to your app's `build.gradle`:
+   ```kotlin
+   implementation("androidx.webkit:webkit:1.11.0")
+   implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+   ```
+3. Register the Activity in your `AndroidManifest.xml`:
+   ```xml
+   <activity android:name="ai.besitos.offerwall.webview.OfferwallActivity" android:screenOrientation="portrait" />
+   ```
+
+### 2. iOS Manual Copy
+
+1. Drag the folder `ios/Sources/BesitosOfferwall` directly into your Xcode project.
+2. Ensure "Copy items if needed" is checked.
+3. Import with `#import "BesitosOfferwall-Swift.h"` (if using ObjC) or `import BesitosOfferwall` (if using Swift).
+
+### 3. React Native Manual Copy
+
+1. Copy the `react-native/src` folder into your project (e.g., as `./vendor/besitos`).
+2. Update your imports to point to the local path:
+   `import { BesitosOfferwall } from './vendor/besitos';`
 
 ---
 
