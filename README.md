@@ -75,13 +75,7 @@ pod install
 ### React Native / Expo
 
 ```bash
-npm install https://github.com/Jay-7stallions/besitos-offerwall-sdk#main:react-native
-```
-
-For Expo managed workflow, also run:
-
-```bash
-npx expo install @besitos/offerwall-sdk
+npm install https://github.com/Jay-7stallions/besitos-offerwall-sdk
 ```
 
 ---
