@@ -29,7 +29,7 @@ class OfferwallModule(private val reactContext: ReactApplicationContext) :
             hideFooter = if (options.hasKey("hideFooter")) options.getBoolean("hideFooter") else false,
         )
 
-        val activity = currentActivity ?: return
+        val activity = reactContext.currentActivity ?: return
         activity.runOnUiThread {
             BesitosOfferwall.show(activity, config)
         }
