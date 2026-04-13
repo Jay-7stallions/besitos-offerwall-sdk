@@ -10,7 +10,7 @@ import {
   View,
 } from "react-native";
 import type { OfferwallError } from "react-native-besitos-offerwall";
-import { BesitosOfferwall, Offerwall } from "react-native-besitos-offerwall";
+import { Offerwall } from "react-native-besitos-offerwall";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Theme = {
@@ -99,10 +99,6 @@ export default function MainScreen() {
       </View>
     </SafeAreaView>
   );
-}
-
-function Label({ text }: { text: string }) {
-  return <Text style={styles.label}>{text}</Text>;
 }
 
 const styles = StyleSheet.create({
