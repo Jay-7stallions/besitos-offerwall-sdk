@@ -1,5 +1,6 @@
 package ai.besitos.offerwall.webview
 
+import ai.besitos.offerwall.SdkConfig
 import ai.besitos.offerwall.config.OfferwallConfig
 import ai.besitos.offerwall.url.UrlBuilder
 import android.annotation.SuppressLint
@@ -37,7 +38,6 @@ class OfferwallActivity : AppCompatActivity() {
 
     companion object {
         private const val EXTRA_CONFIG = "extra_config_url"
-        private const val TRUSTED_HOST = "wall.besitos.ai"
 
         fun launch(context: Context, config: OfferwallConfig) {
             val url = UrlBuilder.build(config)
@@ -203,7 +203,7 @@ class OfferwallActivity : AppCompatActivity() {
 
             override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
                 val host = request?.url?.host ?: return true
-                return host != TRUSTED_HOST
+                return host != SdkConfig.TRUSTED_HOST
             }
         }
     }

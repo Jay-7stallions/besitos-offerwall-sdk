@@ -11,7 +11,6 @@ public class OfferwallViewController: UIViewController {
     private var closeButton: UIButton!
 
     private let offerwallURL: URL
-    private let trustedHost = "wall.besitos.ai"
 
     init(url: URL) {
         self.offerwallURL = url
@@ -35,7 +34,6 @@ public class OfferwallViewController: UIViewController {
 
     public override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        updateLayout()
     }
 
     private func setupWebView() {
@@ -50,12 +48,15 @@ public class OfferwallViewController: UIViewController {
         webView = WKWebView(frame: .zero, configuration: config)
         webView.navigationDelegate = self
         webView.scrollView.bounces = false
+        // Disable automatic inset adjustment - we handle it manually in viewSafeAreaInsetsDidChange
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
         webView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(webView)
 
+        // Pin WebView inside safe area — web viewport starts below notch/Dynamic Island
         NSLayoutConstraint.activate([
-            webView.topAnchor.constraint(equalTo: view.topAnchor),
-            webView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            webView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             webView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             webView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
         ])
@@ -79,7 +80,7 @@ public class OfferwallViewController: UIViewController {
         errorView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(errorView)
         NSLayoutConstraint.activate([
-            errorView.topAnchor.constraint(equalTo: view.topAnchor),
+            errorView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             errorView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             errorView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             errorView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -133,8 +134,6 @@ public class OfferwallViewController: UIViewController {
         ])
     }
 
-    private func updateLayout() {}
-
     private func loadURL() {
         activityIndicator.startAnimating()
         errorView.isHidden = true
@@ -181,6 +180,6 @@ extension OfferwallViewController: WKNavigationDelegate {
             decisionHandler(.cancel)
             return
         }
-        decisionHandler(host == trustedHost ? .allow : .cancel)
+        decisionHandler(host == SdkConfig.trustedHost ? .allow : .cancel)
     }
 }

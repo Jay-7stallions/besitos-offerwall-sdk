@@ -15,8 +15,7 @@ import { WebView, WebViewNavigation } from 'react-native-webview';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BesitosOfferwall } from './BesitosOfferwall';
 import { OfferwallConfig, OfferwallError } from './types';
-
-const TRUSTED_HOST = 'wall.besitos.ai';
+import { SDK_CONFIG } from './sdkConfig';
 
 interface OfferwallContextValue {
   url: string | null;
@@ -99,7 +98,7 @@ function Content() {
     if (!state.url) return;
     try {
       const host = new URL(state.url).hostname;
-      if (host !== TRUSTED_HOST) {
+      if (host !== SDK_CONFIG.TRUSTED_HOST) {
         onClose();
       }
     } catch {}

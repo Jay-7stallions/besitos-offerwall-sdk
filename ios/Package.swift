@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "BesitosOfferwall",
     platforms: [
-        .iOS(.v14)
+        .iOS(.v12)
     ],
     products: [
         .library(
@@ -15,7 +15,10 @@ let package = Package(
     targets: [
         .target(
             name: "BesitosOfferwall",
-            path: "Sources/BesitosOfferwall"
+            path: "Sources/BesitosOfferwall",
+            resources: [
+                .copy("PrivacyInfo.xcprivacy")
+            ]
         ),
     ]
 )

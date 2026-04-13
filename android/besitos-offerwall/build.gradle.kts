@@ -51,7 +51,7 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
                 groupId = "ai.besitos"
-                artifactId = "offerwall-android"
+                artifactId = "offerwall-sdk"
                 version = "1.0.0"
             }
         }

@@ -1,11 +1,10 @@
 package ai.besitos.offerwall.url
 
+import ai.besitos.offerwall.SdkConfig
 import ai.besitos.offerwall.config.OfferwallConfig
 import java.net.URLEncoder
 
 internal object UrlBuilder {
-
-    private const val BASE_URL = "https://wall.besitos.ai/v1"
 
     fun build(config: OfferwallConfig): String {
         val params = buildList {
@@ -23,7 +22,7 @@ internal object UrlBuilder {
             "${encode(k)}=${encode(v)}"
         }
 
-        return "$BASE_URL/${encode(config.partnerId)}/offers?$query"
+        return "${SdkConfig.BASE_URL}/${encode(config.partnerId)}/offers?$query"
     }
 
     private fun encode(value: String): String =

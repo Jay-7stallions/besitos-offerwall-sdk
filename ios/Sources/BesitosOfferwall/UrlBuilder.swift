@@ -1,10 +1,9 @@
 import Foundation
 
 struct UrlBuilder {
-    private static let baseUrl = "https://wall.besitos.ai/v1"
 
     static func build(config: OfferwallConfig) -> URL? {
-        var components = URLComponents(string: "\(baseUrl)/\(encode(config.partnerId))/offers")
+        var components = URLComponents(string: "\(SdkConfig.baseUrl)/\(encode(config.partnerId))/offers")
         var items: [URLQueryItem] = []
 
         items.append(URLQueryItem(name: "userid", value: config.userId))
@@ -24,12 +23,8 @@ struct UrlBuilder {
         if let info = config.info, !info.isEmpty {
             items.append(URLQueryItem(name: "info", value: info))
         }
-        if config.hideHeader {
-            items.append(URLQueryItem(name: "hide_header", value: "1"))
-        }
-        if config.hideFooter {
-            items.append(URLQueryItem(name: "hide_footer", value: "1"))
-        }
+        items.append(URLQueryItem(name: "hide_header", value: config.hideHeader ? "1" : "0"))
+        items.append(URLQueryItem(name: "hide_footer", value: config.hideFooter ? "1" : "0") )
 
         components?.queryItems = items
         return components?.url
