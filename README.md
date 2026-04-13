@@ -246,10 +246,14 @@ If you don't want to use Git or linking, you can manually copy the source files 
    ```kotlin
    implementation("androidx.webkit:webkit:1.11.0")
    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+   implementation("androidx.appcompat:appcompat:1.6.1")
    ```
 3. Register the Activity in your `AndroidManifest.xml`:
    ```xml
-   <activity android:name="ai.besitos.offerwall.webview.OfferwallActivity" android:screenOrientation="portrait" />
+   <activity
+       android:name="ai.besitos.offerwall.webview.OfferwallActivity"
+       android:screenOrientation="portrait"
+       android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
    ```
 
 ### 2. iOS Manual Copy
@@ -258,11 +262,87 @@ If you don't want to use Git or linking, you can manually copy the source files 
 2. Ensure "Copy items if needed" is checked.
 3. Import with `#import "BesitosOfferwall-Swift.h"` (if using ObjC) or `import BesitosOfferwall` (if using Swift).
 
-### 3. React Native Manual Copy
+### 3. React Native Manual
 
-1. Copy the `react-native/src` folder into your project (e.g., as `./vendor/besitos`).
-2. Update your imports to point to the local path:
-   `import { BesitosOfferwall } from './vendor/besitos';`
+Since the SDK uses a **native bridge**, you need to copy both the JS layer and the native bridge files:
+
+**Step 1 — JS Layer:**
+Copy `react-native/src/index.ts` into your project (e.g., as `./vendor/besitos/index.ts`) and update imports:
+```ts
+import { BesitosOfferwall } from './vendor/besitos';
+```
+
+**Step 2 — Android Bridge:**
+1. Copy `react-native/android/src/main/kotlin/ai/besitos/offerwall/rn/` into your app's `src/main/kotlin/` directory.
+2. Also copy `android/besitos-offerwall/src/main/kotlin/ai` into `src/main/kotlin/` (the core SDK).
+3. Add to your `build.gradle`:
+   ```kotlin
+   implementation("androidx.webkit:webkit:1.11.0")
+   implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+   implementation("androidx.appcompat:appcompat:1.6.1")
+   ```
+4. Register the package in your `MainApplication.kt`:
+   ```kotlin
+   import ai.besitos.offerwall.rn.OfferwallPackage
+   // inside getPackages():
+   packages.add(OfferwallPackage())
+   ```
+5. Register the Activity in `AndroidManifest.xml`:
+   ```xml
+   <activity
+       android:name="ai.besitos.offerwall.webview.OfferwallActivity"
+       android:screenOrientation="portrait"
+       android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+   ```
+
+**Step 3 — iOS Bridge:**
+1. Copy `react-native/ios/BesitosOfferwallModule.swift` and `react-native/ios/BesitosOfferwallModule.m` into your iOS project.
+2. Also drag `ios/Sources/BesitosOfferwall` into your Xcode project.
+3. Run `pod install`.
+
+### 4. Expo Manual
+
+Expo has two workflows. Follow the one that matches your project:
+
+---
+
+**Expo Bare Workflow** (`npx expo run:android` / `npx expo run:ios`)
+
+This is the recommended path for testing the SDK in Expo.
+
+1. Install the package:
+   ```bash
+   npm install https://github.com/Jay-7stallions/besitos-offerwall-sdk --force
+   ```
+
+2. Delete the cached native folder and run a full prebuild so autolinking picks up the SDK:
+   ```bash
+   rm -rf android
+   npx expo run:android
+   ```
+
+3. If the module is still not linked after prebuild, open the generated `android/app/src/main/java/.../MainApplication.kt` and add the package manually:
+   ```kotlin
+   import ai.besitos.offerwall.rn.OfferwallPackage
+
+   // Inside getPackages():
+   packages.add(OfferwallPackage())
+   ```
+
+4. Rebuild:
+   ```bash
+   npx expo run:android
+   ```
+
+---
+
+**Expo Managed Workflow** (`npx expo start` only — no native folders)
+
+The SDK uses native code and **cannot run in Expo Go**. To use it in a managed project, you must first eject to bare:
+```bash
+npx expo prebuild
+```
+Then follow the **Expo Bare Workflow** steps above.
 
 ---
 
