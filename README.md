@@ -239,7 +239,7 @@ npm install ../path/to/sdk
 
 If you don't want to use Git or linking, you can manually copy the source files into your project:
 
-### 1. Android Manual Copy
+### 1. Android Manual
 
 1. Copy the folder `android/besitos-offerwall/src/main/kotlin/ai` into your app's `src/main/kotlin/` directory.
 2. Add these dependencies to your app's `build.gradle`:
