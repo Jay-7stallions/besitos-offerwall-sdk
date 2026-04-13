@@ -38,7 +38,7 @@ dependencies {
 }
 ```
 
-**Step 3.** Add internet permission to your `AndroidManifest.xml` if not already present:
+**Step 3.** Add internet permission to your `AndroidManifest.xml` (place it **above** the `<application>` tag):
 
 ```xml
 <uses-permission android:name="android.permission.INTERNET" />
@@ -186,7 +186,8 @@ BesitosOfferwall.show({
 | Problem | Solution |
 | :--- | :--- |
 | Android: crash on launch | Ensure `minSdk` is 21 or higher |
-| Android: white screen | Confirm internet permission is in `AndroidManifest.xml` |
+| Android: `ERR_CACHE_MISS` | Ensure internet permission is **outside** the `<application>` tag |
+| Android: white/blank screen | Confirm internet permission is in `AndroidManifest.xml` |
 | iOS: white screen | Verify the device has network access |
 | iOS: `invalidConfig` error | Check that `partnerId` and `userId` use only `A-Z a-z 0-9 - _` |
 | React Native: module not found | Run `npm install` and `npx expo prebuild` |
@@ -194,44 +195,14 @@ BesitosOfferwall.show({
 
 ---
 
-## Local Development & Testing
+## Integration Guides
 
-If you are a contributor or reviewer and want to test the SDK locally without publishing to a registry:
+For detailed, step-by-step instructions for each platform, see:
 
-### 1. Android (Contritube / Local Test)
-If you want to test the SDK without using JitPack:
-
-1. **Clone the repo** next to your project folder.
-2. In your app's `settings.gradle.kts` (or `.gradle`), link the module:
-   ```kotlin
-   include(":besitos-offerwall")
-   project(":besitos-offerwall").projectDir = File("../besitos-offerwall-sdk/android/besitos-offerwall")
-````
-
-3. In your app's `build.gradle.kts`, add the local project dependency:
-   ```kotlin
-   dependencies {
-       implementation(project(":besitos-offerwall"))
-   }
-   ```
-4. Sync Gradle and use `BesitosOfferwall.show(...)` as usual.
-
-### 2. iOS (Local Pod)
-
-In your test app's `Podfile`:
-
-```ruby
-pod 'BesitosOfferwall', :path => '../path/to/sdk/ios'
-```
-
-### 3. React Native (Local Link)
-
-In your test app's root:
-
-```bash
-# This installs the local folder as a package
-npm install ../path/to/sdk
-```
+- [Android Studio Setup Guide](ANDROID_SETUP.md)
+- [React Native / Expo Guide](#react-native--expo)
+> [!TIP]
+> **New to Android Dev?** Check out our [Full Android Studio Step-by-Step Guide (BesitosExample)](ANDROID_SETUP.md) for a beginner-friendly walkthrough.
 
 ---
 
@@ -241,20 +212,101 @@ If you don't want to use Git or linking, you can manually copy the source files 
 
 ### 1. Android Manual
 
-1. Copy the folder `android/besitos-offerwall/src/main/kotlin/ai` into your app's `src/main/kotlin/` directory.
-2. Add these dependencies to your app's `build.gradle`:
-   ```kotlin
-   implementation("androidx.webkit:webkit:1.11.0")
-   implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-   implementation("androidx.appcompat:appcompat:1.6.1")
-   ```
-3. Register the Activity in your `AndroidManifest.xml`:
-   ```xml
-   <activity
-       android:name="ai.besitos.offerwall.webview.OfferwallActivity"
-       android:screenOrientation="portrait"
-       android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-   ```
+A fresh Android developer can integrate the SDK by copying source files directly into their project.
+
+**Step 1 — Clone the SDK repo** (if you haven't already):
+
+```bash
+git clone https://github.com/Jay-7stallions/besitos-offerwall-sdk.git
+```
+
+**Step 2 — Copy the SDK source files into your project**
+
+In your Android project, open `app/src/main/kotlin/` (or `java/`). Create the folder structure below and copy each file from the SDK repo:
+
+```
+YOUR_PROJECT/
+└── app/src/main/kotlin/
+    └── ai/besitos/offerwall/          ← create this folder
+        ├── BesitosOfferwall.kt        ← copy from android/besitos-offerwall/src/main/kotlin/ai/besitos/offerwall/
+        ├── SdkConfig.kt               ← copy from android/besitos-offerwall/src/main/kotlin/ai/besitos/offerwall/
+        ├── config/
+        │   └── OfferwallConfig.kt     ← copy from .../config/
+        ├── url/
+        │   └── UrlBuilder.kt          ← copy from .../url/
+        ├── validation/
+        │   └── ValidationUtil.kt      ← copy from .../validation/
+        └── webview/
+            └── OfferwallActivity.kt   ← copy from .../webview/
+```
+
+**Step 3 — Copy the theme resource file**
+
+In your project, open `app/src/main/res/values/`. Copy:
+
+```
+android/besitos-offerwall/src/main/res/values/themes.xml
+→ app/src/main/res/values/besitos_themes.xml
+```
+
+> Rename it so it does not conflict with your existing `themes.xml`.
+
+**Step 4 — Add required dependencies**
+
+In your `app/build.gradle` (or `build.gradle.kts`), add:
+
+```kotlin
+dependencies {
+    implementation("androidx.webkit:webkit:1.11.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+}
+```
+
+Click **Sync Now** in Android Studio.
+
+**Step 5 — Update `AndroidManifest.xml`**
+
+Open `app/src/main/AndroidManifest.xml`. **Merge** these into your existing file:
+
+1. Add inside the `<manifest>` tag:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
+2. Add inside the `<application>` tag, below your other activities:
+
+```xml
+<activity
+    android:name="ai.besitos.offerwall.webview.OfferwallActivity"
+    android:screenOrientation="portrait"
+    android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+```
+
+**Step 6 — Use the SDK in your Activity**
+
+```kotlin
+import ai.besitos.offerwall.BesitosOfferwall
+import ai.besitos.offerwall.config.OfferwallConfig
+
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val config = OfferwallConfig(
+            partnerId = "your_partner_id",
+            userId = "user_123"
+        )
+
+        findViewById<Button>(R.id.btnOpenOffers).setOnClickListener {
+            BesitosOfferwall.show(this, config)
+        }
+    }
+}
+```
 
 ### 2. iOS Manual Copy
 
@@ -268,11 +320,13 @@ Since the SDK uses a **native bridge**, you need to copy both the JS layer and t
 
 **Step 1 — JS Layer:**
 Copy `react-native/src/index.ts` into your project (e.g., as `./vendor/besitos/index.ts`) and update imports:
+
 ```ts
-import { BesitosOfferwall } from './vendor/besitos';
+import { BesitosOfferwall } from "./vendor/besitos";
 ```
 
 **Step 2 — Android Bridge:**
+
 1. Copy `react-native/android/src/main/kotlin/ai/besitos/offerwall/rn/` into your app's `src/main/kotlin/` directory.
 2. Also copy `android/besitos-offerwall/src/main/kotlin/ai` into `src/main/kotlin/` (the core SDK).
 3. Add to your `build.gradle`:
@@ -296,6 +350,7 @@ import { BesitosOfferwall } from './vendor/besitos';
    ```
 
 **Step 3 — iOS Bridge:**
+
 1. Copy `react-native/ios/BesitosOfferwallModule.swift` and `react-native/ios/BesitosOfferwallModule.m` into your iOS project.
 2. Also drag `ios/Sources/BesitosOfferwall` into your Xcode project.
 3. Run `pod install`.
@@ -311,17 +366,20 @@ Expo has two workflows. Follow the one that matches your project:
 This is the recommended path for testing the SDK in Expo.
 
 1. Install the package:
+
    ```bash
    npm install https://github.com/Jay-7stallions/besitos-offerwall-sdk --force
    ```
 
 2. Delete the cached native folder and run a full prebuild so autolinking picks up the SDK:
+
    ```bash
    rm -rf android
    npx expo run:android
    ```
 
 3. If the module is still not linked after prebuild, open the generated `android/app/src/main/java/.../MainApplication.kt` and add the package manually:
+
    ```kotlin
    import ai.besitos.offerwall.rn.OfferwallPackage
 
@@ -339,9 +397,11 @@ This is the recommended path for testing the SDK in Expo.
 **Expo Managed Workflow** (`npx expo start` only — no native folders)
 
 The SDK uses native code and **cannot run in Expo Go**. To use it in a managed project, you must first eject to bare:
+
 ```bash
 npx expo prebuild
 ```
+
 Then follow the **Expo Bare Workflow** steps above.
 
 ---
