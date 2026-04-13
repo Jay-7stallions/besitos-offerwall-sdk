@@ -76,13 +76,12 @@ pod install
 
 ```bash
 npm install https://github.com/Jay-7stallions/besitos-offerwall-sdk#main:react-native
-npm install react-native-webview react-native-safe-area-context
 ```
 
 For Expo managed workflow, also run:
 
 ```bash
-npx expo install react-native-webview react-native-safe-area-context
+npx expo install @besitos/offerwall-sdk
 ```
 
 ---
@@ -145,36 +144,26 @@ do {
 ### React Native / Expo
 
 ```tsx
-import React, { useState } from 'react';
-import { Button, ActivityIndicator, Text } from 'react-native';
-import { Offerwall } from '@besitos/offerwall-sdk';
+import { BesitosOfferwall } from '@besitos/offerwall-sdk';
 
-export default function App() {
-  const [open, setOpen] = useState(false);
+// One line — opens the native Offerwall screen.
+BesitosOfferwall.show({
+  partnerId: 'your_partner_id',
+  userId: 'user_123',
+});
+```
 
-  if (open) {
-    return (
-      <Offerwall.Root
-        config={{
-          partnerId: 'your_partner_id',
-          userId: 'user_123',
-        }}
-        onFullClose={() => setOpen(false)}
-      >
-        <Offerwall.Content />
-        <Offerwall.Loader>
-          <ActivityIndicator size="large" />
-        </Offerwall.Loader>
-        <Offerwall.Error>
-          {(err) => <Text>Error: {err.description}</Text>}
-        </Offerwall.Error>
-        <Offerwall.CloseButton />
-      </Offerwall.Root>
-    );
-  }
+With optional parameters:
 
-  return <Button title="Open Offers" onPress={() => setOpen(true)} />;
-}
+```tsx
+BesitosOfferwall.show({
+  partnerId: 'your_partner_id',
+  userId: 'user_123',
+  subId: 'sub_001',
+  hideHeader: true,
+  hideFooter: true,
+});
+```
 ```
 
 ---

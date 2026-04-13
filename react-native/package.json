@@ -1,6 +1,6 @@
 {
   "name": "@besitos/offerwall-sdk",
-  "version": "1.0.0",
+  "version": "1.0.0-beta",
   "description": "Besitos Offerwall Mobile SDK for React Native and Expo",
   "main": "lib/index.js",
   "module": "lib/index.js",
@@ -39,13 +39,9 @@
   "author": "Besitos <sdk@besitos.ai>",
   "license": "MIT",
   "peerDependencies": {
-    "react": ">=18.0.0",
-    "react-native": ">=0.73.0",
-    "react-native-webview": ">=13.0.0",
-    "react-native-safe-area-context": ">=4.0.0"
+    "react-native": ">=0.73.0"
   },
   "devDependencies": {
-    "@types/react": "^18.0.0",
     "@types/react-native": "^0.73.0",
     "typescript": "^5.0.0"
   }
