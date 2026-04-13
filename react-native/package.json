@@ -33,7 +33,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jay-7stallions/Besitos-Offerwall-Mobile-SDK.git",
+    "url": "https://github.com/Jay-7stallions/besitos-offerwall-sdk.git",
     "directory": "react-native"
   },
   "author": "Besitos <sdk@besitos.ai>",

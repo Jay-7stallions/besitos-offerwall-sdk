@@ -34,7 +34,7 @@ dependencyResolutionManagement {
 
 ```gradle
 dependencies {
-    implementation 'com.github.Jay-7stallions:Besitos-Offerwall-Mobile-SDK:v1.0.0-beta'
+    implementation 'com.github.Jay-7stallions:besitos-offerwall-sdk:v1.0.0-beta'
 }
 ```
 
@@ -53,7 +53,7 @@ dependencies {
 In Xcode: **File → Add Package Dependencies** and paste:
 
 ```
-https://github.com/Jay-7stallions/Besitos-Offerwall-Mobile-SDK
+https://github.com/Jay-7stallions/besitos-offerwall-sdk
 ```
 
 **Option B — CocoaPods**
@@ -61,7 +61,7 @@ https://github.com/Jay-7stallions/Besitos-Offerwall-Mobile-SDK
 Add to your `Podfile`:
 
 ```ruby
-pod 'BesitosOfferwall', :git => 'https://github.com/Jay-7stallions/Besitos-Offerwall-Mobile-SDK.git', :branch => 'main'
+pod 'BesitosOfferwall', :git => 'https://github.com/Jay-7stallions/besitos-offerwall-sdk.git', :branch => 'main'
 ```
 
 Then run:
@@ -75,7 +75,7 @@ pod install
 ### React Native / Expo
 
 ```bash
-npm install https://github.com/Jay-7stallions/Besitos-Offerwall-Mobile-SDK#main:react-native
+npm install https://github.com/Jay-7stallions/besitos-offerwall-sdk#main:react-native
 npm install react-native-webview react-native-safe-area-context
 ```
 
